@@ -64,23 +64,22 @@
 /* Copy the first part of user declarations.  */
 #line 1 "json.y" /* yacc.c:339  */
 
- typedef char *string;
-  #define YYSTYPE string
-  #include <iostream>
-  #include <memory>
-  #include "lex.yy.c"
-  #include "ast.hpp"
-  using ast::ASTType ;
-  using ast::pNode;
-  using ast::AllocNode;
-  using ast::ASTNode;
+#include "json.hpp"
+
+using namespace ast;
+
+#define YYSTYPE pNode
+#include <iostream>
+#include <memory>
+#include <fstream>
+#include "lex.yy.cpp"
 
 
-  pNode current_node= nullptr;
+pNode current_node= nullptr;
 
  
 
-#line 84 "json.tab.c" /* yacc.c:339  */
+#line 81 "json.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -144,7 +143,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 148 "json.tab.c" /* yacc.c:358  */
+#line 145 "json.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -442,8 +441,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    22,    22,    24,    28,    30,    34,    36,    39,    41,
-      43,    45,    50,    54,    58,    60,    63
+       0,    19,    19,    22,    27,    30,    35,    39,    44,    47,
+      50,    53,    59,    64,    69,    73,    79
 };
 #endif
 
@@ -1225,25 +1224,30 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 22 "json.y" /* yacc.c:1646  */
+#line 19 "json.y" /* yacc.c:1646  */
     {
-   printf("json_object1\n");
+   //printf("json_object1\n");
+   (yyval)=(yyvsp[0]);
+        current_node=(yyval);
  }
-#line 1233 "json.tab.c" /* yacc.c:1646  */
+#line 1231 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 24 "json.y" /* yacc.c:1646  */
+#line 22 "json.y" /* yacc.c:1646  */
     {
-   printf("json_object2\n");
+   //printf("json_object2\n");
+   (yyval)=(yyvsp[0]);
+        current_node=(yyval);
  }
-#line 1241 "json.tab.c" /* yacc.c:1646  */
+#line 1240 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 28 "json.y" /* yacc.c:1646  */
+#line 27 "json.y" /* yacc.c:1646  */
     {
-     printf("json_array1\n");
+     (yyval) = (yyvsp[-1]);
+     //printf("json_array1\n");
  }
 #line 1249 "json.tab.c" /* yacc.c:1646  */
     break;
@@ -1251,108 +1255,120 @@ yyreduce:
   case 5:
 #line 30 "json.y" /* yacc.c:1646  */
     {
-     printf("json_array2\n");
+     //printf("json_array2\n");
+     (yyval) = AllocNode(ASTType::AT_ARRAY);
  }
-#line 1257 "json.tab.c" /* yacc.c:1646  */
+#line 1258 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 34 "json.y" /* yacc.c:1646  */
+#line 35 "json.y" /* yacc.c:1646  */
     {
-    printf("json_array_elem1\n");
+    //printf("json_array_elem1\n");
+    (yyval)=AllocNode(ASTType::AT_ARRAY);
+    (yyval)->array_children.insert((yyval)->array_children.begin(),(yyvsp[0]));
  }
-#line 1265 "json.tab.c" /* yacc.c:1646  */
+#line 1268 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 36 "json.y" /* yacc.c:1646  */
+#line 39 "json.y" /* yacc.c:1646  */
     {
-    printf("json_array_elem2\n");
+    //printf("json_array_elem2\n");
+    (yyval)=(yyvsp[0]);
+    (yyval)->array_children.insert((yyval)->array_children.begin(),(yyvsp[-2]));
  }
-#line 1273 "json.tab.c" /* yacc.c:1646  */
+#line 1278 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 39 "json.y" /* yacc.c:1646  */
+#line 44 "json.y" /* yacc.c:1646  */
     {
-     printf("TT_STRING1:%s\n",(yyvsp[0]));
-        current_node=AllocNode(ASTType::AT_STRING);
-        current_node->string_val.resize(yyleng);
-        memcpy(const_cast<char*>(current_node->string_val.data()),yyvsp[0],yyleng);
+     //printf("TT_STRING1:%s\n",(yyvsp[0])->string_val.data());
+     (yyval)=(yyvsp[0]);
   }
-#line 1281 "json.tab.c" /* yacc.c:1646  */
+#line 1287 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 41 "json.y" /* yacc.c:1646  */
+#line 47 "json.y" /* yacc.c:1646  */
     {
-     printf("TT_DOUBLE2:%s\n",(yyvsp[0]));
-        current_node=AllocNode(ASTType::AT_DOUBLE);
-        current_node->double_val = std::atof(yyvsp[0]);
+     //printf("TT_DOUBLE2:%s\n",(yyvsp[0])->string_val.data());
+     (yyval)=(yyvsp[0]);
   }
-#line 1289 "json.tab.c" /* yacc.c:1646  */
+#line 1296 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 43 "json.y" /* yacc.c:1646  */
+#line 50 "json.y" /* yacc.c:1646  */
     {
-     printf("TT_INT3:%s\n",(yyvsp[0]));
-        current_node=AllocNode(ASTType::AT_INT);
-        current_node->int_val=std::atoi(yyvsp[0]);
-  }
-#line 1297 "json.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 11:
-#line 45 "json.y" /* yacc.c:1646  */
-    {
-     printf("json_array_object4\n");
+     //printf("TT_INT3:%s\n",(yyvsp[0])->string_val.data());
+     (yyval)=(yyvsp[0]);
   }
 #line 1305 "json.tab.c" /* yacc.c:1646  */
     break;
 
-  case 12:
-#line 51 "json.y" /* yacc.c:1646  */
+  case 11:
+#line 53 "json.y" /* yacc.c:1646  */
     {
-    printf("json_dict1\n");
+     //printf("json_array_object4\n");
+     (yyval)=(yyvsp[0]);
   }
-#line 1313 "json.tab.c" /* yacc.c:1646  */
+#line 1314 "json.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 12:
+#line 60 "json.y" /* yacc.c:1646  */
+    {
+    //printf("json_dict1\n");
+    (yyval)=(yyvsp[-1]);
+  }
+#line 1323 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 54 "json.y" /* yacc.c:1646  */
+#line 64 "json.y" /* yacc.c:1646  */
     {
-    printf("json_dict2\n");
+    //printf("json_dict2\n");
+    (yyval)=AllocNode(ASTType::AT_DICT);
   }
-#line 1321 "json.tab.c" /* yacc.c:1646  */
+#line 1332 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 58 "json.y" /* yacc.c:1646  */
+#line 69 "json.y" /* yacc.c:1646  */
     {
-  printf("json_dict_elem1\n");
+  //printf("json_dict_elem1\n");
+  (yyval)=AllocNode(ASTType::AT_DICT);
+  (yyval)->dict_children.insert(std::make_pair((yyvsp[0])->string_val,(yyvsp[0])->array_children[0]));
 }
-#line 1329 "json.tab.c" /* yacc.c:1646  */
+#line 1342 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 60 "json.y" /* yacc.c:1646  */
+#line 73 "json.y" /* yacc.c:1646  */
     {
-  printf("json_dict_elem2\n");
+  //printf("json_dict_elem2\n");
+  (yyval)=(yyvsp[0]);
+  (yyval)->dict_children.insert(std::make_pair((yyvsp[-2])->string_val,(yyvsp[-2])->array_children[0]));
+
 }
-#line 1337 "json.tab.c" /* yacc.c:1646  */
+#line 1353 "json.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 63 "json.y" /* yacc.c:1646  */
+#line 79 "json.y" /* yacc.c:1646  */
     {
-   printf("json_dict_object:%s\n",(yyvsp[-2]));
+   //printf("json_dict_object:%s\n",(yyvsp[-2])->string_val.data());
+   (yyval)=AllocNode(ASTType::AT_INT);
+   (yyval)->string_val = (yyvsp[-2])->string_val;
+   (yyval)->array_children.push_back((yyvsp[0]));
 }
-#line 1345 "json.tab.c" /* yacc.c:1646  */
+#line 1364 "json.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1349 "json.tab.c" /* yacc.c:1646  */
+#line 1368 "json.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1580,17 +1596,38 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 67 "json.y" /* yacc.c:1906  */
+#line 86 "json.y" /* yacc.c:1906  */
 
 
-int main(){
+pNode ParseFile(const std::string &file_path){
  extern char * yytext;
  extern int yyparse(void);
  extern FILE * yyin;
- yyin= fopen("../target.json","r+");
+ yyin= fopen(file_path.c_str(),"r+");
  yyparse();
 
- return 0;
+    //current_node->ShowTree(current_node);
+ return current_node;
+}
+
+pNode ParseString(const std::string &str){
+    yy_scan_buffer(const_cast<char*>(str.data()),str.size());
+
+    const std::string temp_file_name= "json_temp.temp.temp";
+    std::fstream out(temp_file_name,std::ios::out|std::ios::binary);
+
+    out.write(str.c_str(),str.size());
+
+    out.close();
+
+    extern FILE * yyin;
+    yyin=fopen(temp_file_name.c_str(),"r+");
+    yyparse();
+
+    //current_node->ShowTree(current_node);
+
+    std::remove(temp_file_name.c_str());
+    return current_node;
 }
 
 int yyerror(char *msg){

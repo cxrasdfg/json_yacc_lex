@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 
-extern char*yylval;
+#include "ast.hpp"
+using namespace ast;
+
 
 int countWord=0;
 int lineNumber=1;
@@ -19,16 +21,16 @@ WHITESPACE {SPACE}+
 chars [A-Za-z]*
 %%
 
-\[ {colNumber+=yyleng ;/*puts(yytext);*/ yylval=strdup(yytext); return TT_LEFT_BRACKET;}
-\] {colNumber+=yyleng ;/*puts(yytext);*/ yylval=strdup(yytext); return TT_RIGHT_BRACKET;}
-\{ {colNumber+=yyleng ;/*puts(yytext);*/ yylval=strdup(yytext); return TT_LEFT_BRACE;}
-\} {colNumber+=yyleng ;/*puts(yytext);*/ yylval=strdup(yytext); return TT_RIGHT_BRACE;}
-,  {colNumber+=yyleng ;/*puts(yytext);*/ yylval=strdup(yytext); return TT_COMMA;}
-:  {colNumber+=yyleng ;/*puts(yytext);*/ yylval=strdup(yytext); return TT_COLON;}
+\[ {colNumber+=yyleng ;/*puts(yytext); yylval=strdup(yytext);*/ return TT_LEFT_BRACKET;}
+\] {colNumber+=yyleng ;/*puts(yytext); yylval=strdup(yytext);*/ return TT_RIGHT_BRACKET;}
+\{ {colNumber+=yyleng ;/*puts(yytext); yylval=strdup(yytext);*/ return TT_LEFT_BRACE;}
+\} {colNumber+=yyleng ;/*puts(yytext); yylval=strdup(yytext);*/ return TT_RIGHT_BRACE;}
+,  {colNumber+=yyleng ;/*puts(yytext); yylval=strdup(yytext);*/ return TT_COMMA;}
+:  {colNumber+=yyleng ;/*puts(yytext); yylval=strdup(yytext);*/ return TT_COLON;}
 "\n" {lineNumber+=1 ; colNumber=1; }
-{STRING} {colNumber+=yyleng ;/*puts(yytext);*/ yylval=strdup(yytext); return TT_STRING;}
-{NUMBER} {colNumber+=yyleng ;/*puts(yytext);*/ yylval=strdup(yytext); return TT_INT;}
-{DECIMAL} {colNumber+=yyleng;/*puts(yytext);*/ yylval=strdup(yytext); return TT_DOUBLE;}
+{STRING} {colNumber+=yyleng ;/*puts(yytext);*/ yylval=CreateString(yytext,yyleng); return TT_STRING;}
+{NUMBER} {colNumber+=yyleng ;/*puts(yytext);*/ yylval=CreateString(yytext,yyleng); return TT_INT;}
+{DECIMAL} {colNumber+=yyleng;/*puts(yytext);*/ yylval=CreateString(yytext,yyleng); return TT_DOUBLE;}
 {WHITESPACE} { colNumber+=yyleng ;  /**do nothing*/}
 . {printf("unexpected token\n"); return TT_ERROR;}
 %%
