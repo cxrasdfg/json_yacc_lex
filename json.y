@@ -1,6 +1,6 @@
 %{
-#include "ast.hpp"
-using namespace ast;
+#include "json_ast.hpp"
+using namespace json_ast;
 
 #define YYSTYPE pNode
 #include <iostream>

@@ -3,7 +3,8 @@
  */
 #pragma once
 
-#include "ast.hpp"
-
-auto ParseFile(const std::string &file_path)->ast::pNode ;
-auto ParseString(const std::string &str) -> ast::pNode;
+#include "json_ast.hpp"
+namespace json{
+    auto ParseFile(const std::string &file_path)->json_ast::pNode ;
+    auto ParseString(const std::string &str) -> json_ast::pNode;
+}

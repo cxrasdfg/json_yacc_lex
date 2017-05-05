@@ -66,14 +66,15 @@
 
 #include "json.hpp"
 
-using namespace ast;
+using namespace json_ast;
 
 #define YYSTYPE pNode
 #include <iostream>
 #include <memory>
 #include <fstream>
 #include "lex.yy.cpp"
-
+extern int yyparse(void);
+extern FILE * yyin;
 
 pNode current_node= nullptr;
 
@@ -1599,18 +1600,18 @@ yyreturn:
 #line 86 "json.y" /* yacc.c:1906  */
 
 
-pNode ParseFile(const std::string &file_path){
- extern char * yytext;
- extern int yyparse(void);
- extern FILE * yyin;
+pNode json:: ParseFile(const std::string &file_path){
+
  yyin= fopen(file_path.c_str(),"r+");
  yyparse();
 
     //current_node->ShowTree(current_node);
- return current_node;
+    auto temp=current_node;
+    current_node= nullptr;
+ return temp;
 }
 
-pNode ParseString(const std::string &str){
+pNode json:: ParseString(const std::string &str){
     yy_scan_buffer(const_cast<char*>(str.data()),str.size());
 
     const std::string temp_file_name= "json_temp.temp.temp";
@@ -1620,14 +1621,17 @@ pNode ParseString(const std::string &str){
 
     out.close();
 
-    extern FILE * yyin;
+
     yyin=fopen(temp_file_name.c_str(),"r+");
     yyparse();
 
     //current_node->ShowTree(current_node);
 
     std::remove(temp_file_name.c_str());
-    return current_node;
+
+    auto temp=current_node;
+    current_node= nullptr;
+    return temp;
 }
 
 int yyerror(char *msg){

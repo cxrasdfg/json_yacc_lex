@@ -8,10 +8,9 @@
 #include <cstring>
 #include <unordered_map>
 #include <iostream>
-#include <queue>
 #include <cassert>
 
-namespace ast{
+namespace json_ast{
 
     enum class ASTType{
         AT_INT, //整数
@@ -54,33 +53,37 @@ namespace ast{
                     case ASTType ::AT_DICT:
                     {
                         PrintDeep();
-                        std::cout<<"{"<<std::endl;
+                        std::cout<<"{"/**<<std::endl*/;
 
+                        int i=0;
                         for(auto elem : dict_children){
                             PrintDeep();
                             std::cout<<elem.first<<":";
                             ShowTreeHelp(elem.second);
-                            std::cout<<","<<std::endl;
+                            if((++i)!=dict_children.size())
+                                std::cout<<","/**<<std::endl*/;
                         }
 
                         PrintDeep();
-                        std::cout<<"}"<<std::endl;
+                        std::cout<<"}"/**<<std::endl*/;
 
                     }
                         break;
                     case ASTType ::AT_ARRAY:
                     {
                         PrintDeep();
-                        std::cout<<"["<<std::endl;
+                        std::cout<<"["/**<<std::endl*/;
 
+                        int i=0;
                         for(auto elem:array_children){
                             PrintDeep();
                             ShowTreeHelp(elem);
-                            std::cout<<","<<std::endl;
+                            if((++i)!=array_children.size())
+                                std::cout<<","/**<<std::endl*/;
                         }
 
                         PrintDeep();
-                        std::cout<<"]"<<std::endl;
+                        std::cout<<"]"/**<<std::endl*/;
                     }
                         break;
                 }
@@ -90,8 +93,8 @@ namespace ast{
         }
 
         static void PrintDeep(){
-            for(int i=1;i<deep;i++)
-                std::cout<<" ";
+           // for(int i=1;i<deep;i++)
+                //std::cout<<" ";
 
         }
     public:

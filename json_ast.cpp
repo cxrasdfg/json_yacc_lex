@@ -2,12 +2,12 @@
  * Created by theppsh on 17-5-5.
  */
 
-#include "ast.hpp"
-ast::pNode ast::AllocNode(const ASTType type) {
+#include "json_ast.hpp"
+json_ast::pNode json_ast::AllocNode(const ASTType type) {
 return std::make_shared<ASTNode>(type);
 }
 
-ast::pNode ast::CreateString(const char *str, const int leng) {
+json_ast::pNode json_ast::CreateString(const char *str, const int leng) {
 
     auto result = AllocNode(ASTType::AT_STRING);
     result->string_val.resize(leng);
@@ -16,4 +16,4 @@ ast::pNode ast::CreateString(const char *str, const int leng) {
 
 }
 
-int ast::ASTNode::deep =0;
+int json_ast::ASTNode::deep =0;

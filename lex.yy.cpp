@@ -467,7 +467,7 @@ char *yytext;
 #include <stdio.h>
 #include <string.h>
 #include "json.hpp"
-using namespace ast;
+using namespace json_ast;
 
 
 int countWord=0;
