@@ -1600,19 +1600,27 @@ yyreturn:
 #line 86 "json.y" /* yacc.c:1906  */
 
 
-pNode json:: ParseFile(const std::string &file_path){
+json::PJsonObject json:: ParseFile(const std::string &file_path){
 
+    lineNumber=colNumber=1;
+
+    std::fstream test;
+    test.open(file_path,std::ios::in);
+    if(!test.is_open()){
+        throw json::JsonException("json parser error : file failed  to open");
+    }
  yyin= fopen(file_path.c_str(),"r+");
+
  yyparse();
 
     //current_node->ShowTree(current_node);
     auto temp=current_node;
     current_node= nullptr;
- return temp;
+ return std::dynamic_pointer_cast<json::JsonObject>(temp);
 }
 
-pNode json:: ParseString(const std::string &str){
-    yy_scan_buffer(const_cast<char*>(str.data()),str.size());
+json::PJsonObject json:: ParseString(const std::string &str){
+    lineNumber=colNumber=1;
 
     const std::string temp_file_name= "json_temp.temp.temp";
     std::fstream out(temp_file_name,std::ios::out|std::ios::binary);
@@ -1631,11 +1639,13 @@ pNode json:: ParseString(const std::string &str){
 
     auto temp=current_node;
     current_node= nullptr;
-    return temp;
+    return std::dynamic_pointer_cast<json::JsonObject>(temp);
 }
 
 int yyerror(char *msg){
    extern int lineNumber;
    extern int colNumber;
-   fprintf(stderr,"Error: %s 行号:%d 列号:%d\n",msg,lineNumber,colNumber);
+    char temp[100];
+    std::sprintf(temp,"json parser error: %s 行号:%d 列号:%d\n\0",msg,lineNumber,colNumber);
+    throw json::JsonException(temp);
 }

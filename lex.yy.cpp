@@ -791,17 +791,17 @@ case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
 #line 31 "json.l"
-{colNumber+=yyleng ;/*puts(yytext);*/ yylval=CreateString(yytext,yyleng); return TT_STRING;}
+{colNumber+=yyleng ;/*puts(yytext);*/ yylval=CreateString(yytext,yyleng); yylval->string_val=RawToString(yylval->string_val); return TT_STRING;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 32 "json.l"
-{colNumber+=yyleng ;/*puts(yytext);*/ yylval=CreateString(yytext,yyleng); return TT_INT;}
+{colNumber+=yyleng ;/*puts(yytext);*/ yylval=CreateInt(yytext,yyleng); return TT_INT;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 33 "json.l"
-{colNumber+=yyleng;/*puts(yytext);*/ yylval=CreateString(yytext,yyleng); return TT_DOUBLE;}
+{colNumber+=yyleng;/*puts(yytext);*/ yylval=CreateDouble(yytext,yyleng); return TT_DOUBLE;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
@@ -811,7 +811,7 @@ YY_RULE_SETUP
 case 12:
 YY_RULE_SETUP
 #line 35 "json.l"
-{printf("unexpected token\n"); return TT_ERROR;}
+{/*printf("unexpected token\n");*/ return TT_ERROR;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
